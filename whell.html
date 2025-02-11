@@ -77,8 +77,8 @@
             text-shadow: 1px 1px 3px #4615ff;   
         }   
         .num-1 { transform: translate(620%, 15px); }        
-        .num-2 { transform: translate(870%, 70px); }   
-        .num-3 { transform: translate(950%, 140px); }        
+        .num-2 { transform: translate(810%, 70px); }   
+        .num-3 { transform: translate(890%, 140px); }        
         .num-4 { transform: translate(250px, 220px); }   
         .num-5 { transform: translate(185px, 265px); }        
         .num-6 { transform: translate(100px, 265px); }   
@@ -125,7 +125,7 @@
    
         if (lastSpin) {   
             const timeDiff = currentTime - lastSpin;   
-            if (timeDiff < 0 * 1 * 60 * 1000) {   
+            if (timeDiff < 24 * 60 * 60 * 1000) {   
                 const remainingTime = 24 * 60 * 60 * 1000 - timeDiff;   
                 disableSpinButton(remainingTime);   
             }   
