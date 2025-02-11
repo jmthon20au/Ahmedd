@@ -1,0 +1,213 @@
+<!DOCTYPE html>   
+<html lang="en">   
+<head>   
+    <meta charset="UTF-8">   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">   
+    <title>عجلة الحظ</title>   
+    <style>   
+         body {  
+            font-family: Arial, sans-serif;  
+            text-align: center;  
+            background-image: url('wallper.webp');  
+        }   
+        h1 {  
+            margin-top: 20px;  
+            font-size: 1.5em;  
+            color: #333;  
+            animation: colorChange 5s linear infinite;  
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);  
+        }  
+        @keyframes colorChange {  
+            0% { color: #ff4b5c; }  
+            25% { color: #6a8d92; }  
+            50% { color: #ff8c00; }  
+            75% { color: #32a852; }  
+            100% { color: #ff4b5c; }  
+        }  
+        .wheel-container {   
+            margin: 50px auto;   
+            width: 310px;   
+            height: 310px;   
+            position: relative;   
+        }   
+        .wheel {   
+            width: 100%;   
+            height: 100%;   
+            border-radius: 100%;   
+            background: conic-gradient(   
+                #55d5ff 0deg 36deg,   
+                #3cd672 36deg 72deg,   
+                #55d5ff 72deg 108deg,   
+                #3cd672 108deg 144deg,   
+                #55d5ff 144deg 180deg,   
+                #3cd672 180deg 216deg,   
+                #55d5ff 216deg 252deg,   
+                #3cd672 252deg 288deg,   
+                #55d5ff 288deg 324deg,   
+                #3cd672 324deg 360deg   
+            );   
+            position: absolute;   
+        }   
+        button {   
+            margin-top: 30px;   
+            padding: 12px 30px;   
+            font-size: 18px;   
+            background: #4caf50;   
+            color: white;   
+            border: 2px solid #4caf50;   
+            border-radius: 50px;   
+            cursor: pointer;   
+            transition: all 0.3s ease-in-out;   
+        }   
+        button:disabled {   
+            background: #ff555f;   
+            border-color: #ccc;   
+            cursor: not-allowed;   
+        }   
+        #resultMessage, #countdown {   
+            margin-top: 20px;   
+            font-size: 1.2em;   
+            color: #ff2b4a;   
+        }   
+        .numbers div {   
+            position: absolute;   
+            font-size: 25px;   
+            font-weight: bold;   
+            color: white;   
+            text-shadow: 1px 1px 3px #4615ff;   
+        }   
+        .num-1 { transform: translate(620%, 15px); }        
+        .num-2 { transform: translate(870%, 70px); }   
+        .num-3 { transform: translate(950%, 140px); }        
+        .num-4 { transform: translate(250px, 220px); }   
+        .num-5 { transform: translate(185px, 265px); }        
+        .num-6 { transform: translate(100px, 265px); }   
+        .num-7 { transform: translate(30px, 215px); }        
+        .num-8 { transform: translate(10px, 140px); }   
+        .num-9 { transform: translate(30px, 60px); }        
+        .num-10 { transform: translate(100px, 15px); }   
+    </style>   
+</head>   
+<body>   
+    <h1>Dinars مرحبا بك في عجلة تطبيق</h1>   
+    <h1>🎁 العجلة مجانية 🎁</h1>   
+    <h1>🔹 مرة واحدة كل 24 ساعة 🔹</h1>   
+    <div class="wheel-container">   
+        <div class="wheel" id="wheel"> 
+        <div class="numbers">   
+            <div class="num-1">🎁</div>    
+            <div class="num-2">🎁</div>    
+            <div class="num-3">🎁</div>    
+            <div class="num-4">🎁</div>    
+            <div class="num-5">🎁</div>    
+            <div class="num-6">🎁</div>    
+            <div class="num-7">🎁</div>    
+            <div class="num-8">🎁</div>    
+            <div class="num-9">🎁</div>    
+            <div class="num-10">🎁</div>  
+        </div>   
+        </div> 
+    </div>   
+    <button id="spinButton">🔄 تدوير العجلة</button>  
+    <div id="resultMessage"></div>   
+    <div id="countdown"></div>   
+   
+    <script>   
+        const spinButton = document.getElementById('spinButton');   
+        const resultMessage = document.getElementById('resultMessage');   
+        const countdown = document.getElementById('countdown');   
+        const wheel = document.getElementById('wheel');   
+        let isSpinning = false;   
+   
+        // التحقق من آخر تدوير   
+        const lastSpin = localStorage.getItem('lastSpin');   
+        const currentTime = new Date().getTime();   
+   
+        if (lastSpin) {   
+            const timeDiff = currentTime - lastSpin;   
+            if (timeDiff < 0 * 1 * 60 * 1000) {   
+                const remainingTime = 24 * 60 * 60 * 1000 - timeDiff;   
+                disableSpinButton(remainingTime);   
+            }   
+        }   
+   
+        spinButton.addEventListener('click', async () => {   
+            if (isSpinning) return;   
+            isSpinning = true;   
+   
+            const randomDegree = Math.floor(Math.random() * 360) + 3600;   
+            wheel.style.transition = 'transform 5s ease-out';   
+            wheel.style.transform = `rotate(${randomDegree}deg)`; // تصحيح استخدام الأقواس   
+   
+            setTimeout(async () => {   
+                const segment = Math.floor(((randomDegree % 360) / 36) + 1);   
+                resultMessage.textContent = `نتيجتك: ${segment} حاول مرة اخرى عند انتهاء الوقت`; // تصحيح النص في النتيجة   
+   
+                // حفظ وقت آخر تدوير   
+                localStorage.setItem('lastSpin', new Date().getTime());   
+                disableSpinButton(24 * 60 * 60 * 1000);   
+   
+                // إرسال النتيجة إلى البوت   
+const userInfo = JSON.parse(localStorage.getItem('userInfo'));   
+const result = { ...userInfo, result: segment };   
+
+try {   
+    const response = await fetch('send.json');   
+    const { botToken, chatIds } = await response.json(); // تعديل من chatId إلى chatIds
+    
+    // تكرار إرسال الرسالة إلى كل chatId
+    for (let chatId of chatIds) {
+        await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {  
+            method: 'POST',   
+            headers: { 'Content-Type': 'application/json' },   
+            body: JSON.stringify({  
+                chat_id: chatId,  
+                text: ` 
+                ⌛استاذ احمد وصلك طلب جديد ⌛ \n 
+🧑‍💻 اسم مستخدم: ${userInfo.name}\n 
+🔗 رمز الإحالة: ${userInfo.symbol}\n 
+🔑 كود الدعوة: ${userInfo.code}\n 
+🎰 نتيجة العجلة: ${segment}\n 
+📅 التاريخ: ${new Date().toLocaleString()} \n
+🟢 رابط العجلة : https://www.dinars.rf.gd
+                                 
+                `,  
+            }),  
+        });  
+    }
+} catch (error) {   
+    console.error('فشل إرسال النتيجة:', error);   
+}
+
+   
+                isSpinning = false;   
+            }, 5000);   
+        });   
+   
+        function disableSpinButton(duration) {   
+            spinButton.disabled = true;   
+            startCountdown(duration);   
+        }   
+   
+        function startCountdown(duration) {   
+            const endTime = new Date().getTime() + duration;   
+   
+            const interval = setInterval(() => {   
+                const now = new Date().getTime();   
+                const remaining = endTime - now;   
+   
+                if (remaining <= 0) {   
+                    clearInterval(interval);   
+                    countdown.textContent = '';   
+                    spinButton.disabled = false;   
+                } else {   
+                    const hours = Math.floor(remaining / (1000 * 60 * 60));   
+                    const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));   
+                    const seconds = Math.floor((remaining % (1000 * 60)) / 1000);   
+                    countdown.textContent = `يمكنك المحاولة مرة أخرى بعد: ${hours} ساعة و ${minutes} دقيقة و ${seconds} ثانية`;   
+                }   
+            }, 1000);   
+        }   
+    </script>   
+</body>   
+</html>
